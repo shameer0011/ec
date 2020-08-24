@@ -42,6 +42,7 @@
         <br>
         <div class="box-element hidden" id="payment-info">
             <small>Paypal Options</small>
+            <button id="make-payment">Make payment</button>
         </div>
 
     </div>
@@ -75,15 +76,46 @@
         </div>
     </div>
 </div>
-<!--  'order'from viwes.py and 'shippings' from models.py  (under)-->
-<script type="text/javascript">
 
-    var shipping = '{{order.shippings}}'
+<script type="text/javascript">
+    var user = '{{request.user}}'
+    //stright from models.py not depend views.py..but only in script ..
+    //'order'from viwes.py and 'shippings' from models.py  (under)..
+
+    var shipping = '{{order.shippingss}}'
+    var total = '{{order.get_cart_total|floatformat}}'
 
     if (shipping == 'False') {
         document.getElementById('shipping-info').innerHTML = ''
     }
+    //hide name and email..
 
+    if (user != 'AnonymousUser') {
+        document.getElementById('user-info').innerHTML = ''
+    }
+
+    if (shipping == 'False' && user != 'AnonymousUser') {
+        //Hide entire form if user is logged in and shipping is false
+        document.getElementById('form-wrapper').classList.add("hidden");
+        //Show payment if logged in user wants to buy an item that does not require shipping
+        document.getElementById('payment-info').classList.remove("hidden");
+    }
+    //for hidden for payment section..
+    var form = document.getElementById('form')
+    form.addEventListener('submit', function (e) {
+        e.preventDefault()
+        console.log("form submitted...")
+
+        document.getElementById('form-button').classList.add("hidden");
+        document.getElementById('payment-info').classList.remove("hidden");
+    })
+
+    document.getElementById('make-payment').addEventListener('click', function (e) {
+        submitFormData()
+    })
+    function submitFormData() {
+        console.log("make a payment..")
+    }
 </script>
 
 {% endblock content %}

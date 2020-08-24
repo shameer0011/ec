@@ -51,7 +51,7 @@ class Order(models.Model):
             return total
 
         @property
-        def shippings(self): 
+        def shippingss(self): 
             shipping = False
             orderitems = self.orderitem_set.all()
             for i in orderitems:

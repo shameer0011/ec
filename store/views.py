@@ -52,12 +52,14 @@ def checkout(request):
             items = order.orderitem_set.all()
             print(items)
             cart_items=order.get_cart_items
+            #cart_total=order.get_cart_total
           
        else:
             #Create empty cart for now for non-logged in user
             items = []
             order={'get_cart_items':0,'get_cart_total':0}
             cart_items=order['get_cart_items']
+            #cart_total=order['get_cart_total']
             
        context = {'items':items,'order':order,'cart_items':cart_items}
        return render(request,'store/checkout.html',context)
