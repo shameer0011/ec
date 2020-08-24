@@ -35,6 +35,15 @@ class Order(models.Model):
         def __str__(self):
             return str(self.id)
 
+       
+
+        @property
+        def get_cart_items(self):
+            orderitems=self.orderitem_set.all()
+            total=sum([items.quantity for items in orderitems])
+            return total
+
+                
         @property
         def get_cart_total(self):
             orderitems=self.orderitem_set.all()
@@ -42,10 +51,14 @@ class Order(models.Model):
             return total
 
         @property
-        def get_cart_items(self):
-            orderitems=self.orderitem_set.all()
-            total=sum([items.quantity for items in orderitems])
-            return total
+        def shippings(self): 
+            shipping = False
+            orderitems = self.orderitem_set.all()
+            for i in orderitems:
+                if i.product.digital == False:
+                    shipping = True
+            return shipping
+
 
 
 class OrderItem(models.Model):
@@ -54,10 +67,12 @@ class OrderItem(models.Model):
    quantity=models.IntegerField(default=0, null=True, blank=True)
    date_added=models.DateTimeField(auto_now_add=True)
 
+   
    @property
    def get_total(self):
        total=self.product.price * self.quantity
        return total
+
 
 
 class ShippingAddress(models.Model):
