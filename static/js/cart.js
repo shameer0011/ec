@@ -1,6 +1,7 @@
-// it is included in 'main.html'..
+// it is included in 'main.html'..but extended all html page..
 
 var updateBtns = document.getElementsByClassName('update-cart');
+console.log("haii", updateBtns.length)
 for (i = 0; i < updateBtns.length; i++) {
     updateBtns[i].addEventListener('click', function () {
         var productId = this.dataset.product;
@@ -19,6 +20,7 @@ for (i = 0; i < updateBtns.length; i++) {
         }
     })
 }
+
 
 
 
