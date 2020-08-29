@@ -15,7 +15,7 @@ def store(request):
 
     order=data['order']
     cart_Items=data['cart_Items']
-    cart_total=data['cart_total'] 
+  
         
     Data=cookieCart(request)
     
@@ -160,15 +160,48 @@ def processOrder(request):
                 order.complete=True
             order.save()
             #'shippingss'is a function in models.py..
-            if order.shippingss==True:
-                print("shipping is true")
-                ShippingAddress.objects.get_or_create(customer=customer,order=order ,
-                address=data['shipping12']['address'],
-                state=data['shipping12']['state'],
-                city=data['shipping12']['city'],
-                zipcode=data['shipping12']['zipcode'])
+          
     else:
         print("User not login")
+        print("cookies",request.COOKIES)
+        name = data['form12']['name']
+        email = data['form12']['email']
+
+        cookieData = cookieCart(request)
+        items = cookieData['items']
+
+        customer, created = Customer.objects.get_or_create(
+                email=email,
+                )
+        customer.name = name
+        customer.save()
+
+        order = Order.objects.create(
+            customer12=customer,
+            complete=False,
+            )
+
+        for item in items:
+            product = Product.objects.get(id=item['product']['id'])
+            orderItem = OrderItem.objects.create(
+                product=product,
+                order=order,
+                quantity=item['quantity'],
+            )
+    order.transaction_id=transaction_id
+    total=float(data['form12']['total'])
+    if total==order.get_cart_total:
+        order.complete=True
+        order.save() 
+
+    if order.shippingss==True:
+        print("shipping is true")
+        ShippingAddress.objects.get_or_create(customer=customer,order=order ,
+        address=data['shipping12']['address'],
+        state=data['shipping12']['state'],
+        city=data['shipping12']['city'],
+        zipcode=data['shipping12']['zipcode'])
+
     return JsonResponse('payment completed',safe=False)
 
 def checkout1(request):

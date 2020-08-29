@@ -25,7 +25,7 @@ def cookieCart(request):
                     order['get_cart_items']+=cart[i]['quantity_s']# full total cart..get from total loop to store a value..
 
                     cart_Items += cart[i]['quantity_s']# only for layout total cart..
-                    cart_total= order['get_cart_total']
+                    
 
                     item={
                         'product':{
@@ -42,9 +42,10 @@ def cookieCart(request):
                 except:# oru product ne cart lek maatti..pinne db il ninn athine kalanju..appo error varum..ath vraathirikan..
                     pass 
                
-            return {'cart_Items':cart_Items,'items':items,'order':order,'cart_total':cart_total}
+            return {'cart_Items':cart_Items,'items':items,'order':order}
 
 def cartData(request):
+
     if request.user.is_authenticated:
             customer = request.user.customer#to get  customer name..
             #print(customer)
@@ -67,6 +68,12 @@ def cartData(request):
             cart_Items=cartData['cart_Items']
             items=cartData['items']
             order=cartData['order']
-            cart_total=cartData['cart_total']
+            
 
     return  {'items':items,'order':order,'cart_Items':cart_Items,'cart_total':cart_total}
+
+
+
+
+
+
