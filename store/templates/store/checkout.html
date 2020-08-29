@@ -74,7 +74,7 @@
             <!-- we may write..get 'order' kitty kazhijal aa table nte ella properties um kiitum. -->
             <!-- <h5>Items:{{order.get_cart_items}} </h5>
             <h5>Total: ${{order.get_cart_total}}</h5> -->
-            <h5>Items:{{cart_items}} </h5>
+            <h5>Items:{{cart_Items}} </h5>
             <h5>Total: ${{cart_total}}</h5>
         </div>
     </div>
@@ -85,7 +85,7 @@
     //stright from models.py not depend views.py..but only in script ..
     //'order'from viwes.py and 'shippings' from models.py  (under)..
 
-    var shipping = '{{order.shippingss}}'
+    var shipping = '{{order.shippingss}}'//call function 'shippingss' in models.py..
     var total = '{{cart_total|floatformat}}'
     // we may write.. var total = '{{order.get_cart_total|floatformat}}'..'order' kittiyal athinte ella values um kittum..
 
@@ -110,8 +110,8 @@
     }
     //for hidden for payment section..
     //when press submit button work id 'form'..<form id='form'>..
-    var form = document.getElementById('form')
-    form.addEventListener('submit', function (e) {
+    var f = document.getElementById('form')
+    f.addEventListener('submit', function (e) {
         e.preventDefault()
         console.log("form submitted...")
 
@@ -137,6 +137,7 @@
             zipcode: null,
         }
         if (shipping !== 'False') {
+            //'form is a form tag ' from html page
             shippingInfo.address = form.address.value;
             shippingInfo.city = form.city.value;
             shippingInfo.state = form.state.value;
