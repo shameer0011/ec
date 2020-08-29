@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 import json
 import datetime
-from . utils import cookieCart
+from . utils import cookieCart,cartData
 
 
 #from .models import Product,Order,Customer,OrderItem,ShippingAddress
@@ -10,21 +10,32 @@ from . models import *
 
 # Create your views here.
 def store(request):
-    # show total cart items..
-    if request.user.is_authenticated:
-        customer=request.user.customer
-        order, created = Order.objects.get_or_create(customer12=customer, complete=False)
-        items = order.orderitem_set.all()
-        cart_Items=order.get_cart_items
-    else:
-        cartData=cookieCart(request)
-        cart_Items=cartData['cart_Items']
+
+    data=cartData(request)
+
+    order=data['order']
+    cart_Items=data['cart_Items']
+    cart_total=data['cart_total'] 
         
-        # if no items and order .then show dispaly(below)
-        # items=[]
-        # order={'get_cart_items':0,'shipping':False}
-        # cart_Items=order['get_cart_items']
-        # print(cart_Items)
+    Data=cookieCart(request)
+    
+    cart_Items=Data['cart_Items']
+        # show total cart items..
+        #this block comments to 'utils.py' "cartData()"..
+        
+    """ if request.user.is_authenticated:
+            customer=request.user.customer
+            order, created = Order.objects.get_or_create(customer12=customer, complete=False)
+            items = order.orderitem_set.all()
+            cart_Items=order.get_cart_items
+    else: """
+    
+            
+            # if no items and order .then show dispaly(below)
+            # items=[]
+            # order={'get_cart_items':0,'shipping':False}
+            # cart_Items=order['get_cart_items']
+            # print(cart_Items)
 
     product=Product.objects.all()
     # context={'product':product,'order':order,'cart_Items':cart_Items}..if empty ..using 'order..
@@ -32,6 +43,7 @@ def store(request):
     return render(request,'store/store.html',context)
 
 def cart(request):
+       
     
         if request.user.is_authenticated:
             customer = request.user.customer#to get  customer name..
@@ -50,10 +62,10 @@ def cart(request):
             cartData=cookieCart(request)
             cart_Items=cartData['cart_Items']
             items=cartData['items']
-            order=cartData['order']
+            order=cartData['order'] 
 
-        
-            """ try:
+            # this block comments 'to utils.py'..
+            """ try: 
                 cart=json.loads(request.COOKIES['cart'])
                 print(cart)
             except:
@@ -93,32 +105,12 @@ def cart(request):
         return render(request, 'store/cart.html', context)
 
 def checkout(request):
-       if request.user.is_authenticated:
-            customer = request.user.customer#to get  customer name..
-            #print(customer)
-            #User and Customer is oneToOne field..
-            order, created = Order.objects.get_or_create(customer12=customer, complete=False)
-            #print(order)..show id of Order table..
-            print(created)
-            print(order.transaction_id)
-            print(order.customer12)
-            items = order.orderitem_set.all()
-            print(items)
-            cart_Items=order.get_cart_items
-            cart_total=order.get_cart_total
-          
-       else:
-            #Create empty cart for now for non-logged in user
-            items = []
-            order={'get_cart_items':0,'get_cart_total':0,'shipping':False}
-            cart_Items=order['get_cart_items']
-            cart_total=order['get_cart_total']
-
-            cartData=cookieCart(request)
-            cart_Items=cartData['cart_Items']
-            items=cartData['items']
-            order=cartData['order']
-            cart_total=cartData['cart_total']
+     
+       data=cartData(request)
+       items=data['items']
+       order=data['order']
+       cart_Items=data['cart_Items']
+       cart_total=data['cart_total']
 
        context = {'items':items,'order':order,'cart_Items':cart_Items,'cart_total':cart_total}
        return render(request,'store/checkout.html',context)

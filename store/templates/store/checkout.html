@@ -164,6 +164,11 @@
             .then((data) => {
                 console.log('Success:', data);//data=JsonResponse..
                 alert('Transaction completed');
+
+                //for clear cart under two lines..
+                cart = {}
+                document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+
                 window.location.href = "{% url 'store' %}"
 
             })

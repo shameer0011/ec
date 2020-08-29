@@ -43,3 +43,30 @@ def cookieCart(request):
                     pass 
                
             return {'cart_Items':cart_Items,'items':items,'order':order,'cart_total':cart_total}
+
+def cartData(request):
+    if request.user.is_authenticated:
+            customer = request.user.customer#to get  customer name..
+            #print(customer)
+            #User and Customer is oneToOne field..
+            order, created = Order.objects.get_or_create(customer12=customer, complete=False)
+            #print(order)..show id of Order table..
+            items = order.orderitem_set.all()
+            print(items)
+            cart_Items=order.get_cart_items
+            cart_total=order.get_cart_total
+          
+    else:
+            #Create empty cart for now for non-logged in user
+            items = []
+            order={'get_cart_items':0,'get_cart_total':0,'shipping':False}
+            cart_Items=order['get_cart_items']
+            cart_total=order['get_cart_total']
+
+            cartData=cookieCart(request)
+            cart_Items=cartData['cart_Items']
+            items=cartData['items']
+            order=cartData['order']
+            cart_total=cartData['cart_total']
+
+    return  {'items':items,'order':order,'cart_Items':cart_Items,'cart_total':cart_total}
