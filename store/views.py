@@ -94,7 +94,7 @@ def cart(request):
                             'imageUrl':product.imageUrl,
                             'digital':product.digital
                         },
-                        'quantity':cart[i]['quantity_s'],
+                        'quantity_s':cart[i]['quantity_s'],
                         'get_total':total
                     }
                     items.append(item)

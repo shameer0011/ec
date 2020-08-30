@@ -22,6 +22,9 @@ for (i = 0; i < updateBtns.length; i++) {
     })
 }
 //for unassigned user..
+//unassigned users does not go to 'processOrder python function'..
+//only go topython cart()..
+
 function addCookieItem(productId, action) {
     console.log('User is not authenticated')
 
